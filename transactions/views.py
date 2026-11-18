@@ -2,7 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
+from django.db import transaction as db_transaction
 from django.db.models import Q
+
+from wallet.models import Wallet
 
 from .models import (
     Transaction,
@@ -14,11 +17,13 @@ from .forms import TransactionForm
 
 
 @login_required
+@db_transaction.atomic
 def send_transaction(request):
     """Create and submit a new cryptocurrency transaction."""
     sender_wallet = request.user.wallet
 
     if request.method == 'POST':
+        sender_wallet = Wallet.objects.select_for_update(no_key=True).get(pk=sender_wallet.pk)
         form = TransactionForm(request.POST, sender_wallet=sender_wallet)
         if form.is_valid():
             receiver_wallet = form.receiver_wallet
@@ -87,7 +92,10 @@ def transaction_history(request):
 def transaction_detail(request, tx_hash):
     """Display full details of a specific transaction."""
     transaction = get_object_or_404(
-        Transaction.objects.select_related('sender__user', 'receiver__user'),
+        Transaction.objects.select_related('sender__user', 'receiver__user').filter(
+            Q(sender__user=request.user) | Q(receiver__user=request.user)
+            | Q(status=Transaction.STATUS_CONFIRMED)
+        ),
         transaction_hash=tx_hash
     )
     return render(request, 'transactions/detail.html', {

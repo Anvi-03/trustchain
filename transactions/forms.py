@@ -1,5 +1,6 @@
 from decimal import Decimal
 from django import forms
+from django.db.models import Sum
 from wallet.models import Wallet
 
 
@@ -51,4 +52,11 @@ class TransactionForm(forms.Form):
                 f"Insufficient balance. Your current balance is {self.sender_wallet.balance} MYC."
             )
 
-        return amount
+        if self.sender_wallet:
+            reserved = self.sender_wallet.sent_transactions.filter(
+                status="Pending", blocks__isnull=True
+            ).aggregate(total=Sum("amount", default=0))["total"]
+            if self.sender_wallet.balance - reserved < amount:
+                raise forms.ValidationError("Insufficient balance after pending transfers.")
+
+        return amount.quantize(Decimal("0.00000001"))

@@ -1,0 +1,48 @@
+:root, [data-bs-theme="dark"] {
+    color-scheme: dark;
+    --bs-body-bg: #101614;
+    --bs-body-color: #e8f2ed;
+    --bs-secondary-color: #aabfb4;
+    --bs-border-color: #304039;
+    --bs-link-color-rgb: 141, 230, 180;
+    --bs-link-hover-color-rgb: 187, 252, 214;
+    --bs-code-color: #a3e9bf;
+}
+
+.site-header { background: #151f1a; border-bottom: 1px solid var(--bs-border-color); }
+.nav-link { font-size: .9rem; }
+.coin-mark {
+    display: inline-grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    margin-right: .3rem;
+    border-radius: .5rem;
+    color: #0b2114;
+    background: #8de6b4;
+}
+.card { --bs-card-bg: #17221d; --bs-card-border-color: var(--bs-border-color); }
+.balance-card { background: linear-gradient(125deg, #1e3829, #17221d 80%); }
+.balance-value { font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.btn-primary {
+    --bs-btn-color: #0b2114;
+    --bs-btn-bg: #8de6b4;
+    --bs-btn-border-color: #8de6b4;
+    --bs-btn-hover-color: #0b2114;
+    --bs-btn-hover-bg: #b4f0cc;
+    --bs-btn-hover-border-color: #b4f0cc;
+    --bs-btn-active-color: #0b2114;
+    --bs-btn-active-bg: #70ca98;
+    --bs-btn-active-border-color: #70ca98;
+}
+code, .wrap-anywhere { overflow-wrap: anywhere; }
+.key-data { background: var(--bs-body-bg); white-space: pre-wrap; overflow-wrap: anywhere; }
+
+@media (max-width: 575.98px) {
+    .recent-transactions {
+        table-layout: fixed;
+        font-size: .8125rem;
+        overflow-wrap: anywhere;
+    }
+    .recent-transactions th, .recent-transactions td { padding-inline: .4rem; }
+}

@@ -92,7 +92,7 @@ class LogoutTests(TestCase):
         self.client.login(username='testuser', password='SecurePass123!')
 
     def test_logout(self):
-        response = self.client.get(reverse('logout'))
+        response = self.client.post(reverse('logout'))
         self.assertRedirects(response, reverse('login'))
 
     def test_home_requires_login(self):

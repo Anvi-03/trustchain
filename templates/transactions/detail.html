@@ -6,7 +6,11 @@
 <div class="mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Transaction Details</h2>
-        <a href="{% url 'transaction_history' %}" class="btn btn-outline-secondary">Back to History</a>
+        {% if ledger_block %}
+            <a href="{% url 'block_detail' ledger_block.index %}" class="btn btn-outline-secondary">Back to Block #{{ ledger_block.index }}</a>
+        {% else %}
+            <a href="{% url 'transaction_history' %}" class="btn btn-outline-secondary">Back to History</a>
+        {% endif %}
     </div>
     <hr>
 
@@ -63,7 +67,7 @@
             <div class="row mb-2">
                 <div class="col-sm-3 text-muted">Digital Signature (RSA-PSS)</div>
                 <div class="col-sm-9">
-                    <pre class="bg-light p-3 small text-break" style="white-space: pre-wrap; word-break: break-all;">{{ transaction.signature }}</pre>
+                    <pre class="key-data p-3 small text-break" style="white-space: pre-wrap; word-break: break-all;">{{ transaction.signature }}</pre>
                     <small class="text-muted">Signed using sender's RSA private key; verified using sender's public key.</small>
                 </div>
             </div>

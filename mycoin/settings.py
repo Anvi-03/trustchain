@@ -2,6 +2,7 @@
 Django settings for mycoin project.
 """
 
+from decimal import Decimal
 from pathlib import Path
 from decouple import config
 from django.contrib.messages import constants as message_constants
@@ -91,7 +92,8 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -111,3 +113,6 @@ LOGOUT_REDIRECT_URL = 'login'
 MESSAGE_TAGS = {
     message_constants.ERROR: 'danger',
 }
+
+# Simulated MYC awarded for each successfully mined block.
+MINING_REWARD = Decimal("10.00000000")
