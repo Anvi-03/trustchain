@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}My Wallet - MyCoin{% endblock %}
+
+{% block content %}
+<div class="mt-4">
+    <h2>My Wallet</h2>
+    <hr>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Wallet Address</h5>
+            <p class="card-text text-break"><code>{{ wallet.address }}</code></p>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Balance</h5>
+            <p class="card-text fs-4">{{ wallet.balance }} MYC</p>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Public Key</h5>
+            <pre class="bg-light p-3 text-break" style="white-space: pre-wrap;">{{ wallet.public_key }}</pre>
+        </div>
+    </div>
+</div>
+{% endblock %}

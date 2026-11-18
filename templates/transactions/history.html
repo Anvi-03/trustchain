@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Transaction History - MyCoin{% endblock %}
+
+{% block content %}
+<div class="mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Transaction History</h2>
+        <a href="{% url 'send_transaction' %}" class="btn btn-primary">Send Coins</a>
+    </div>
+    <hr>
+
+    {% if transactions %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Type</th>
+                        <th>Counterparty</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Timestamp (UTC)</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tx in transactions %}
+                        <tr>
+                            <td>
+                                {% if tx.sender == wallet %}
+                                    <span class="badge bg-danger">Sent</span>
+                                {% else %}
+                                    <span class="badge bg-success">Received</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if tx.sender == wallet %}
+                                    To: <code>{{ tx.receiver.address|slice:":16" }}...</code> ({{ tx.receiver.user.username }})
+                                {% else %}
+                                    From: <code>{{ tx.sender.address|slice:":16" }}...</code> ({{ tx.sender.user.username }})
+                                {% endif %}
+                            </td>
+                            <td>
+                                <strong>{{ tx.amount }} MYC</strong>
+                            </td>
+                            <td>
+                                {% if tx.status == 'Confirmed' %}
+                                    <span class="badge bg-success">Confirmed</span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ tx.timestamp|date:"Y-m-d H:i:s" }}</td>
+                            <td>
+                                <a href="{% url 'transaction_detail' tx_hash=tx.transaction_hash %}" class="btn btn-sm btn-outline-info">
+                                    Details
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-secondary">
+            No transactions found yet. <a href="{% url 'send_transaction' %}">Send your first transaction</a>!
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
